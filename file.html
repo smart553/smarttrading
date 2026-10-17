@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#081521">
+
+  <title>Smart Trading | الأسواق العالمية في مكان واحد</title>
+  <meta name="description"
+        content="تابع الأسهم والمؤشرات والعملات والسلع والعملات الرقمية والسندات من Smart Trading.">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #081521;
+      --bg-soft: #0c1c2a;
+      --panel: #102333;
+      --line: #20384a;
+      --text: #f4f7fa;
+      --muted: #a9b7c3;
+      --gold: #e6c36a;
+      --green: #60d5a2;
+      --width: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 82% 12%, rgba(26, 66, 89, .36), transparent 32rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Tahoma, Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(var(--width), calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(8, 21, 33, .94);
+      border-bottom: 1px solid rgba(140, 170, 190, .13);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      flex-shrink: 0;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: .3px;
+    }
+
+    .brand span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 23px;
+      color: #d0d9e0;
+      font-size: 13px;
+    }
+
+    .nav-links a:hover,
+    .footer-links a:hover { color: var(--gold); }
+
+    .button {
+      min-height: 43px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: var(--gold);
+      color: #16212a;
+      font-weight: 700;
+      font-size: 13px;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .button:hover {
+      background: #f0d587;
+      transform: translateY(-1px);
+    }
+
+    .button-outline {
+      color: var(--text);
+      background: transparent;
+      border-color: #42596b;
+    }
+
+    .button-outline:hover {
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 70px 0 58px;
+      display: grid;
+      grid-template-columns: .88fr 1.12fr;
+      gap: 45px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 17px;
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 23px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    h1 {
+      max-width: 590px;
+      margin: 0;
+      font-size: clamp(38px, 5vw, 60px);
+      line-height: 1.28;
+      letter-spacing: -.7px;
+    }
+
+    h1 span { color: var(--gold); }
+
+    .hero-copy > p {
+      max-width: 550px;
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 2;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 27px;
+    }
+
+    .trust-note {
+      margin-top: 18px;
+      color: #8395a4;
+      font-size: 11px;
+    }
+
+    .market-panel {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid #294255;
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(16,35,51,.97), rgba(8,21,33,.97));
+      box-shadow: 0 24px 75px rgba(0,0,0,.26);
+    }
+
+    .market-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 1px 3px 13px;
+    }
+
+    .market-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .market-status {
+      color: var(--green);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .ticker-box,
+    .chart-box {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #0b1925;
+    }
+
+    .ticker-box { min-height: 48px; margin-bottom: 13px; }
+    .chart-box { height: 410px; }
+
+    .widget-caption {
+      padding-top: 7px;
+      color: #8293a0;
+      text-align: center;
+      font-size: 10px;
+    }
+
+    .section {
+      padding: 70px 0;
+      border-top: 1px solid rgba(140,170,190,.1);
+    }
+
+    .section-heading {
+      max-width: 700px;
+      margin: 0 auto 32px;
+      text-align: center;
+    }
+
+    .section-heading .eyebrow { margin-bottom: 9px; }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(27px, 3vw, 38px);
+      line-height: 1.35;
+    }
+
+    .section-heading p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .market-card {
+      min-height: 150px;
+      padding: 21px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: linear-gradient(145deg, rgba(16,35,51,.9), rgba(10,25,38,.8));
+    }
+
+    .market-card .tag {
+      display: inline-block;
+      margin-bottom: 11px;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .market-card h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .market-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .feature-card {
+      min-height: 178px;
+      padding: 23px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--panel);
+    }
+
+    .feature-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 15px;
+      border: 1px solid rgba(230,195,106,.3);
+      border-radius: 12px;
+      color: var(--gold);
+      background: rgba(230,195,106,.08);
+      font-size: 19px;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 7px;
+      font-size: 15px;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .cta-panel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+      padding: 30px;
+      border: 1px solid rgba(230,195,106,.28);
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 10% 50%, rgba(230,195,106,.1), transparent 18rem),
+        var(--bg-soft);
+    }
+
+    .cta-panel h2 { font-size: 25px; }
+
+    .cta-panel p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .faq-list {
+      max-width: 820px;
+      margin: auto;
+    }
+
+    details {
+      margin-bottom: 11px;
+      padding: 17px 19px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--bg-soft);
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    details p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .site-footer {
+      padding: 30px 0;
+      border-top: 1px solid rgba(140,170,190,.13);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .risk-note {
+      margin: 16px 0 0;
+      color: #8395a4;
+      font-size: 11px;
+      line-height: 1.9;
+    }
+
+    @media (max-width: 900px) {
+      .nav { flex-wrap: wrap; padding: 13px 0; }
+
+      .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding: 4px 0;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding-top: 50px;
+      }
+
+      .hero-copy { max-width: 680px; }
+    }
+
+    @media (max-width: 650px) {
+      .container { width: min(100% - 28px, var(--width)); }
+      .hero { padding: 40px 0; }
+      .hero-copy > p { font-size: 14px; }
+      .chart-box { height: 350px; }
+      .market-panel { padding: 11px; }
+      .market-grid, .feature-grid { grid-template-columns: 1fr; }
+      .section { padding: 52px 0; }
+
+      .cta-panel, .footer-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .cta-panel { padding: 23px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#home" aria-label="Smart Trading الرئيسية">
+        SMART <span>TRADING</span>
+      </a>
+
+      <nav class="nav-links" aria-label="القائمة الرئيسية">
+        <a href="#home">الرئيسية</a>
+        <a href="#markets">الأسواق</a>
+        <a href="#features">المميزات</a>
+        <a href="#faq">الأسئلة الشائعة</a>
+        <a href="#contact">تواصل معنا</a>
+      </nav>
+
+      <a class="button" href="#markets">استكشف الأسواق</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="container hero" id="home">
+      <div class="hero-copy">
+        <div class="eyebrow">منصة لمتابعة الأسواق العالمية</div>
+        <h1>الأسواق العالمية،<br><span>في لوحة واحدة</span></h1>
+        <p>
+          تابع الأسهم والمؤشرات والعملات والسلع والعملات الرقمية والسندات
+          من مكان واحد. استكشف الرسوم البيانية وأدوات السوق، واختر الأصول
+          التي تريد متابعتها.
+        </p>
+
+        <div class="hero-actions">
+          <a class="button" href="#markets">استكشف الأسواق</a>
+          <a class="button button-outline" href="#features">مميزات المنصة</a>
+        </div>
+
+        <div class="trust-note">
+          الأسعار والرسوم مصدرها أداة السوق المضمّنة، وقد يختلف توقيت تحديثها.
+        </div>
+      </div>
+
+      <section class="market-panel" id="markets" aria-label="نظرة عامة على الأسواق">
+        <div class="market-top">
+          <div class="market-title">متابعة متعددة للأسواق</div>
+          <div class="market-status">● رموز من فئات مختلفة</div>
+        </div>
+
+        <!-- شريط أسعار: أسهم، مؤشر، عملات، سلعة، عملة رقمية وسند -->
+        <div class="ticker-box">
+          <div class="tradingview-widget-container" style="height:100%;width:100%">
+            <div class="tradingview-widget-container__widget"></div>
+            <script
+              type="text/javascript"
+              src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+              async>
+            {
+              "symbols": [
+                { "proName": "NASDAQ:AAPL", "title": "Apple" },
+                { "proName": "SP:SPX", "title": "S&P 500" },
+                { "proName": "FX:EURUSD", "title": "EUR/USD" },
+                { "proName": "OANDA:XAUUSD", "title": "Gold" },
+                { "proName": "BITSTAMP:BTCUSD", "title": "Bitcoin" },
+                { "proName": "TVC:US10Y", "title": "US 10Y" }
+              ],
+              "showSymbolLogo": true,
+              "isTransparent": true,
+              "displayMode": "adaptive",
+              "colorTheme": "dark",
+              "locale": "ar"
+            }
+            </script>
+          </div>
+        </div>
+
+        <!-- رسم عام مع قائمة رموز متنوعة؛ غيّر الرموز حسب ما تريد عرضه -->
+        <div class="chart-box">
+          <div class="tradingview-widget-container" style="height:100%;width:100%">
+            <div class="tradingview-widget-container__widget"
+                 style="height:calc(100% - 32px);width:100%"></div>
+            <div class="tradingview-widget-copyright widget-caption">
+              <a href="https://www.tradingview.com/" target="_blank"
+                 rel="noopener nofollow">الرسم البياني عبر TradingView</a>
+            </div>
+            <script
+              type="text/javascript"
+              src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
+              async>
+            {
+              "autosize": true,
+              "symbol": "SP:SPX",
+              "interval": "D",
+              "timezone": "Etc/UTC",
+              "theme": "dark",
+              "style": "1",
+              "withdateranges": true,
+              "allow_symbol_change": true,
+              "hide_side_toolbar": true,
+              "hide_top_toolbar": false,
+              "hide_legend": false,
+              "hide_volume": true,
+              "save_image": false,
+              "locale": "ar",
+              "backgroundColor": "#0c1c2a",
+              "gridColor": "rgba(70, 90, 110, 0.18)",
+              "watchlist": [
+                "NASDAQ:AAPL",
+                "NASDAQ:NVDA",
+                "SP:SPX",
+                "NASDAQ:NDX",
+                "FX:EURUSD",
+                "OANDA:XAUUSD",
+                "BITSTAMP:BTCUSD",
+                "TVC:US10Y"
+              ],
+              "support_host": "https://www.tradingview.com"
+            }
+            </script>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="section" aria-labelledby="market-types-title">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">تغطية متنوعة</div>
+          <h2 id="market-types-title">تابع فئات الأسواق المختلفة</h2>
+          <p>
+            أمثلة لفئات وأصول يمكن عرضها في الصفحة. عدّل الرموز لتناسب
+            الأسواق التي تريد أن تركز عليها.
+          </p>
+        </div>
+
+        <div class="market-grid">
+          <article class="market-card">
+            <span class="tag">الأسهم</span>
+            <h3>شركات وأسواق الأسهم</h3>
+            <p>تابع أسهم شركات مختارة من البورصات التي يدعمها مزود البيانات.</p>
+          </article>
+
+          <article class="market-card">
+            <span class="tag">المؤشرات</span>
+            <h3>مؤشرات الأسواق</h3>
+            <p>راقب مؤشرات تمثل أداء أسواق أو قطاعات، مثل S&amp;P 500 وNasdaq 100.</p>
+          </article>
+
+          <article class="market-card">
+            <span class="tag">العملات</span>
+            <h3>أسواق العملات</h3>
+            <p>استعرض أزواج العملات الرئيسية، مع الانتباه إلى اختلاف مصدر التسعير.</p>
+          </article>
+
+          <article class="market-card">
+            <span class="tag">السلع</span>
+            <h3>السلع والمواد الأولية</h3>
+            <p>أضف الذهب أو النفط أو غيرهما من السلع المتاحة لدى مزود البيانات.</p>
+          </article>
+
+          <article class="market-card">
+            <span class="tag">الأصول الرقمية</span>
+            <h3>العملات الرقمية</h3>
+            <p>تابع الأصول الرقمية من رموز وبورصات يدعمها الرسم المضمّن.</p>
+          </article>
+
+          <article class="market-card">
+            <span class="tag">السندات</span>
+            <h3>السندات ومؤشرات العائد</h3>
+            <p>يمكن إضافة رموز السندات أو العوائد المتاحة من مصدر البيانات المختار.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">مميزات المنصة</div>
+          <h2>أدوات تساعدك على متابعة السوق</h2>
+          <p>
+            واجهة بداية قابلة للتطوير؛ أضف الخدمات الفعلية التي تقدمها
+            Smart Trading عند تجهيزها.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">⌁</div>
+            <h3>رسوم بيانية تفاعلية</h3>
+            <p>غيّر الرمز والفترة الزمنية وتابع حركة الأسواق من الرسم البياني.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">◈</div>
+            <h3>قائمة متابعة متنوعة</h3>
+            <p>اجمع رموزًا من عدة فئات في قائمة واحدة لتسهيل التنقل بينها.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">▤</div>
+            <h3>محتوى تعليمي</h3>
+            <p>أضف مقالات وشروحات عن الأسواق ومبادئ قراءة الرسوم البيانية.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section">
+      <div class="cta-panel">
+        <div>
+          <h2>ابدأ باستكشاف الأسواق</h2>
+          <p>اختر رمزًا من قائمة الرسم البياني لمتابعة الأصل الذي يهمك.</p>
+        </div>
+        <a class="button" href="#markets">انتقل إلى الأسواق</a>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">معلومات مهمة</div>
+          <h2>أسئلة شائعة</h2>
+        </div>
+
+        <div class="faq-list">
+          <details>
+            <summary>هل الصفحة تعرض سوقًا واحدًا فقط؟</summary>
+            <p>
+              لا، تحتوي على رموز من فئات متعددة. يمكنك تعديل الرموز في إعدادات
+              شريط الأسعار وقائمة الرسم البياني لإضافة الأصول المناسبة.
+            </p>
+          </details>
+
+          <details>
+            <summary>هل كل الأسعار لحظية؟</summary>
+            <p>
+              ليس بالضرورة. ذلك يعتمد على السوق ومزود البيانات وشروط الترخيص.
+              تحقق من حالة كل رمز ومصدره قبل الاعتماد على السعر.
+            </p>
+          </details>
+
+          <details>
+            <summary>هل هذه الصفحة تقدم توصيات تداول؟</summary>
+            <p>
+              لا. الصفحة تعرض أدوات ومعلومات سوقية فقط، ولا تقدم توصيات شراء
+              أو بيع أو ضمانًا للربح.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="container">
+      <div class="footer-row">
+        <a class="brand" href="#home">SMART <span>TRADING</span></a>
+
+        <div class="footer-links">
+          <!-- استبدل البريد والروابط المؤقتة ببياناتك الفعلية -->
+          <a href="mailto:hello@smarttrading.example">تواصل معنا</a>
+          <a href="#contact">سياسة الخصوصية</a>
+          <a href="#contact">الشروط والأحكام</a>
+        </div>
+      </div>
+
+      <p class="risk-note">
+        المعلومات والرسوم البيانية لأغراض الاطلاع فقط، ولا تمثل نصيحة
+        استثمارية أو توصية بالتداول. ينطوي التداول على مخاطر. تأكد من
+        تراخيص استخدام البيانات وشروط مزودها قبل نشر الموقع تجاريًا.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
